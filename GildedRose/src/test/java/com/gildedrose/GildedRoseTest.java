@@ -46,8 +46,8 @@ class GildedRoseTest {
 
         app.updateQuality();
 
-        assertEquals(qualityExcepted, app.items[0].quality, "La qualité n'est pas celle attendue");
-        assertEquals(sellInExcepted, app.items[0].sellIn, "La valeur de vente n'est pas celle attendue");
+        assertEquals(qualityExcepted, app.items[0].getQuality(), "La qualité n'est pas celle attendue");
+        assertEquals(sellInExcepted, app.items[0].getSellIn(), "La valeur de vente n'est pas celle attendue");
 
     }
 

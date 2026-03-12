@@ -8,17 +8,19 @@ public class Item {
     /**
      * Nom de l'item
      */
-    public String name;
+    private String name;
 
     /**
      * Prix de vente de l'item
      */
-    public int sellIn;
+    private int sellIn;
+
+
 
     /**
      * Qualité de l'item
      */
-    public int quality;
+    private int quality;
 
     /**
      * Constructeur publique
@@ -36,4 +38,16 @@ public class Item {
    public String toString() {
         return this.name + ", " + this.sellIn + ", " + this.quality;
     }
+
+
+    // Getters et Setters
+
+    public int getQuality() { return quality; }
+    public void setQuality(int quality) { this.quality = quality; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public int getSellIn() { return sellIn; }
+    public void setSellIn(int sellIn) { this.sellIn = sellIn; }
 }

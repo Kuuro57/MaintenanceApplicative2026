@@ -49,7 +49,6 @@ class GildedRoseTest {
             case "Aged Brie" -> item = new AgedBrie(sellIn, quality);
             case "Backstage passes to a TAFKAL80ETC concert" -> item = new Backstage(sellIn, quality);
             case "Sulfuras, Hand of Ragnaros" -> item = new Sulfuras(sellIn, quality);
-            // TODO Ajouter un case pour ANYTHING ???
             default -> item = new AgedBrie(9999999, 9999999);
         }
 

@@ -13,10 +13,4 @@ public class Sulfuras extends Item {
         this.name = "Sulfuras, Hand of Ragnaros";
     }
 
-
-    @Override
-    public void updateInformations() {
-        // Ne fait rien...
-    }
-
 }

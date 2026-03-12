@@ -40,11 +40,6 @@ public abstract class Item {
     }
 
 
-    /**
-     * Méthode qui met à jour les données de l'item
-     */
-    public abstract void updateInformations();
-
 
     // Getters
     public int getQuality() { return quality; }

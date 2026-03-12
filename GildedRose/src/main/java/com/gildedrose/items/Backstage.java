@@ -1,6 +1,6 @@
 package com.gildedrose.items;
 
-public class Backstage extends Item {
+public class Backstage extends Item implements Updatable {
 
     /**
      * Constructeur publique

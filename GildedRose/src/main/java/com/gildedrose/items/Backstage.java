@@ -15,24 +15,21 @@ public class Backstage extends Item {
 
 
     @Override
-    public void updateQuality() {
-
-        if (this.quality < 50) {
-            this.quality += 1;
-
-            if (this.sellIn < 11 && this.quality < 50) {
-                this.quality += 1;
-            }
-            if (this.sellIn < 6 && this.quality < 50) {
-                this.quality += 1;
-            }
-        }
-
-        this.sellIn -= 1;
+    public void updateInformations() {
 
         if (sellIn < 0) {
             this.quality = 0;
         }
+        else if (this.quality < 50) {
+            this.quality++;
+
+            if (this.quality < 50) {
+                if (this.sellIn < 6) { this.quality += 2; }
+                else if (this.sellIn < 11) { this.quality++; }
+            }
+        }
+
+        this.sellIn--;
 
     }
 

@@ -41,9 +41,9 @@ public abstract class Item {
 
 
     /**
-     * Méthode qui met à jour la qualité de l'item
+     * Méthode qui met à jour les données de l'item
      */
-    public abstract void updateQuality();
+    public abstract void updateInformations();
 
 
     // Getters

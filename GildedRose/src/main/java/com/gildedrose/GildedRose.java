@@ -13,11 +13,6 @@ class GildedRose {
     Item[] items;
 
 
-    private final static String AGED_BRIE = "Aged Brie";
-    private final static String BACKSTAGE = "Backstage passes to a TAFKAL80ETC concert";
-    private final static String SULFURAS = "Sulfuras, Hand of Ragnaros";
-
-
 
     /**
      * Constructeur publique
@@ -30,10 +25,10 @@ class GildedRose {
 
 
     /**
-     * Met à jour la qualité de chaque item sur le marché
+     * Met à jour les données de chaque item sur le marché
      */
-    public void updateQualityOfAllItems() {
-        for (Item item : items) { item.updateQuality(); }
+    public void updateInformationsOfAllItems() {
+        for (Item item : items) { item.updateInformations(); }
     }
 
 

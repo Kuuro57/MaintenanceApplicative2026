@@ -54,7 +54,7 @@ class GildedRoseTest {
         Item[] items = new Item[] { item };
         GildedRose app = new GildedRose(items);
 
-        app.updateQualityOfAllItems();
+        app.updateInformationsOfAllItems();
 
         assertEquals(qualityExcepted, app.items[0].getQuality(), "La qualité n'est pas celle attendue");
         assertEquals(sellInExcepted, app.items[0].getSellIn(), "La valeur de vente n'est pas celle attendue");

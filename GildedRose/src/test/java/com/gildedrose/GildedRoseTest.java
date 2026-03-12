@@ -34,6 +34,8 @@ class GildedRoseTest {
             "'Backstage passes to a TAFKAL80ETC concert', 12, 1, 11, 2",
             "'Backstage passes to a TAFKAL80ETC concert', 10, 49, 9, 50",
             "'Backstage passes to a TAFKAL80ETC concert', 1, 49, 0, 50",
+            "'Backstage passes to a TAFKAL80ETC concert', 7, 48, 6, 50",
+            "'Backstage passes to a TAFKAL80ETC concert', 1, 51, 0, 51",
             "'Aged Brie', -1, 1, -2, 3",
             "'Aged Brie', -1, 51, -2, 51",
             "'Backstage passes to a TAFKAL80ETC concert', -1, 51, -2, 0",

@@ -1,5 +1,7 @@
 package com.gildedrose;
 
+import com.gildedrose.items.Item;
+
 /**
  * Classe qui représente la GildedRose (référence à World Of Warcraft)
  */
@@ -10,6 +12,13 @@ class GildedRose {
      */
     Item[] items;
 
+
+    private final static String AGED_BRIE = "Aged Brie";
+    private final static String BACKSTAGE = "Backstage passes to a TAFKAL80ETC concert";
+    private final static String SULFURAS = "Sulfuras, Hand of Ragnaros";
+
+
+
     /**
      * Constructeur publique
      * @param items Liste d'items à ajouter au marché
@@ -18,60 +27,14 @@ class GildedRose {
         this.items = items;
     }
 
+
+
     /**
      * Met à jour la qualité de chaque item sur le marché
      */
-    public void updateQuality() {
-
-        for (Item item : items) {
-            if (!item.getName().equals("Aged Brie")
-                    && !item.getName().equals("Backstage passes to a TAFKAL80ETC concert")) {
-                if (item.getQuality() > 0) {
-                    if (!item.getName().equals("Sulfuras, Hand of Ragnaros")) {
-                        item.setQuality(item.getQuality() - 1);
-                    }
-                }
-            } else {
-                if (item.getQuality() < 50) {
-                    item.setQuality(item.getQuality() + 1);
-
-                    if (item.getName().equals("Backstage passes to a TAFKAL80ETC concert")) {
-                        if (item.getSellIn() < 11) {
-                            if (item.getQuality() < 50) {
-                                item.setQuality(item.getQuality() + 1);
-                            }
-                        }
-
-                        if (item.getSellIn() < 6) {
-                            if (item.getQuality() < 50) {
-                                item.setQuality(item.getQuality() + 1);
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (!item.getName().equals("Sulfuras, Hand of Ragnaros")) {
-                item.setSellIn(item.getSellIn() - 1);
-            }
-
-            if (item.getSellIn() < 0) {
-                if (!item.getName().equals("Aged Brie")) {
-                    if (!item.getName().equals("Backstage passes to a TAFKAL80ETC concert")) {
-                        if (item.getQuality() > 0) {
-                            if (!item.getName().equals("Sulfuras, Hand of Ragnaros")) {
-                                item.setQuality(item.getQuality() - 1);
-                            }
-                        }
-                    } else {
-                        item.setQuality(0);
-                    }
-                } else {
-                    if (item.getQuality() < 50) {
-                        item.setQuality(item.getQuality() + 1);
-                    }
-                }
-            }
-        }
+    public void updateQualityOfAllItems() {
+        for (Item item : items) { item.updateQuality(); }
     }
+
+
 }

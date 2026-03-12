@@ -1,5 +1,9 @@
 package com.gildedrose;
 
+import com.gildedrose.items.AgedBrie;
+import com.gildedrose.items.Backstage;
+import com.gildedrose.items.Item;
+import com.gildedrose.items.Sulfuras;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,20 +17,18 @@ class GildedRoseTest {
     @DisplayName("Test de la méthode toString() de la classe Item")
     void testToStringItem() {
 
-        var item = new Item("ANYTHING", 50, 10);
+        var item = new AgedBrie(50, 10);
 
         var res = item.toString();
 
-        assertEquals("ANYTHING, 50, 10", res);
+        assertEquals("Aged Brie, 50, 10", res);
 
     }
 
     @ParameterizedTest(name = "{index} - nom: {0}, sellIn: {1}, quality: {2}")
     @CsvSource({
-            "'ANYTHING', 1, 1, 0, 0",
             "'Aged Brie', 1, 1, 0, 2",
             "'Backstage passes to a TAFKAL80ETC concert', 1, 1, 0, 4",
-            "'ANYTHING', 1, 0, 0, 0",
             "'Sulfuras, Hand of Ragnaros', 1, 1, 1, 1",
             "'Aged Brie', 1, 51, 0, 51",
             "'Backstage passes to a TAFKAL80ETC concert', 12, 1, 11, 2",
@@ -36,15 +38,23 @@ class GildedRoseTest {
             "'Aged Brie', -1, 51, -2, 51",
             "'Backstage passes to a TAFKAL80ETC concert', -1, 51, -2, 0",
             "'Sulfuras, Hand of Ragnaros', -1, 51, -1, 51",
-            "'Sulfuras, Hand of Ragnaros', -1, -1, -1, -1",
-            "'ANYTHING', -1, 10, -2, 8"
+            "'Sulfuras, Hand of Ragnaros', -1, -1, -1, -1"
     })
     void allTest(String name, int sellIn, int quality, int sellInExcepted, int qualityExcepted) {
 
-        Item[] items = new Item[] { new Item(name, sellIn, quality) };
+        Item item;
+        switch (name) {
+            case "Aged Brie" -> item = new AgedBrie(sellIn, quality);
+            case "Backstage passes to a TAFKAL80ETC concert" -> item = new Backstage(sellIn, quality);
+            case "Sulfuras, Hand of Ragnaros" -> item = new Sulfuras(sellIn, quality);
+            // TODO Ajouter un case pour ANYTHING ???
+            default -> item = new AgedBrie(9999999, 9999999);
+        }
+
+        Item[] items = new Item[] { item };
         GildedRose app = new GildedRose(items);
 
-        app.updateQuality();
+        app.updateQualityOfAllItems();
 
         assertEquals(qualityExcepted, app.items[0].getQuality(), "La qualité n'est pas celle attendue");
         assertEquals(sellInExcepted, app.items[0].getSellIn(), "La valeur de vente n'est pas celle attendue");

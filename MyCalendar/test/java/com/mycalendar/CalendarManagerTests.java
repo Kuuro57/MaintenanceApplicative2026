@@ -1,5 +1,8 @@
 package com.mycalendar;
 
+import com.mycalendar.types.Periodique;
+import com.mycalendar.types.Reunion;
+import com.mycalendar.types.RdvPersonnel;
 import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayOutputStream;
@@ -77,37 +80,28 @@ public class CalendarManagerTests {
      */
     private static void initEvents() {
 
-        PERIODIC_EVENT_ONE = new Event(
-                "PERIODIQUE",
+        PERIODIC_EVENT_ONE = new Periodique(
                 "Evènement 1",
                 "Noah",
                 INITIAL_DATE,
                 60,
-                "Nancy",
-                "Noah, Loup, Elias",
                 1
         );
 
-        NON_PERIODIC_EVENT_ONE = new Event(
-                "Type 1",
+        NON_PERIODIC_EVENT_ONE = new Reunion(
                 "Evènement 1",
                 "Loup",
                 INITIAL_DATE.plusDays(1),
                 90,
                 "Paris",
-                "Mr X, Loup, Elias",
-                6
+                "Mr X, Loup, Elias"
         );
 
-        NON_PERIODIC_EVENT_TWO = new Event(
-                "Type 2",
+        NON_PERIODIC_EVENT_TWO = new RdvPersonnel(
                 "Evènement 2",
                 "Mr X",
                 INITIAL_DATE.plusDays(4),
-                90,
-                "Anger",
-                "Mr X",
-                0
+                90
         );
 
     }
@@ -123,58 +117,54 @@ public class CalendarManagerTests {
         CALENDAR_MANAGER_WITH_PERIODIC_EVENT = new CalendarManager();
 
         CALENDAR_MANAGER_WITH_ONE_EVENT.ajouterEvent(
-                "Réunion",
-                "Réunion test",
-                "Noah",
-                INITIAL_DATE,
-                60,
-                "Nancy",
-                "Noah / Loup / Elias",
-                1
+                new Reunion(
+                        "Réunion test",
+                        "Noah",
+                        INITIAL_DATE,
+                        60,
+                        "Nancy",
+                        "Noah, Loup, Elias"
+                )
         );
 
         CALENDAR_MANAGER_WITH_MANY_EVENT.ajouterEvent(
-                "REUNION",
-                "Réunion test",
-                "Noah",
-                INITIAL_DATE,
-                60,
-                "Nancy",
-                "Noah / Loup / Elias",
-                1
+                new Reunion(
+                        "Réunion test",
+                        "Noah",
+                        INITIAL_DATE,
+                        60,
+                        "Nancy",
+                        "Noah, Loup, Elias"
+                )
         );
 
         CALENDAR_MANAGER_WITH_MANY_EVENT.ajouterEvent(
-                "RDV_PERSONNEL",
-                "Réunion test 2",
-                "Loup",
-                INITIAL_DATE.plusDays(1).minusHours(5),
-                60,
-                "Metz",
-                "Loup / Elias",
-                5
+                new RdvPersonnel(
+                        "Réunion test 2",
+                        "Loup",
+                        INITIAL_DATE.plusDays(1).minusHours(5),
+                        60
+                )
         );
 
         CALENDAR_MANAGER_WITH_MANY_EVENT.ajouterEvent(
-                "PERIODIQUE",
-                "Réunion test 3",
-                "Mr X",
-                INITIAL_DATE.plusDays(4).plusHours(6),
-                150,
-                "Paris",
-                "Mr X / Mr Y / Mr Z",
-                8
+                new Periodique(
+                        "Réunion test 3",
+                        "Mr X",
+                        INITIAL_DATE.plusDays(4).plusHours(6),
+                        150,
+                        8
+                )
         );
 
         CALENDAR_MANAGER_WITH_PERIODIC_EVENT.ajouterEvent(
-                "PERIODIQUE",
-                "Réunion test Périodique",
-                "Mr X",
-                INITIAL_DATE,
-                60,
-                "Paris",
-                "Mr X / Mr Z",
-                2
+                new Periodique(
+                        "Réunion test Périodique",
+                        "Mr X",
+                        INITIAL_DATE,
+                        60,
+                        2
+                )
         );
 
     }
@@ -200,14 +190,14 @@ public class CalendarManagerTests {
         var calendarManager = new CalendarManager();
 
         calendarManager.ajouterEvent(
-                "Réunion",
-                "Réunion test",
-                "Noah",
-                INITIAL_DATE,
-                60,
-                "Nancy",
-                "Noah / Loup / Elias",
-                1
+                new Reunion(
+                        "Réunion test",
+                        "Noah",
+                        INITIAL_DATE,
+                        60,
+                        "Nancy",
+                        "Noah, Loup, Elias"
+                )
         );
         var listEvents = calendarManager.events;
 
@@ -343,26 +333,22 @@ public class CalendarManagerTests {
 
         var calendarManager = EMPTY_CALENDAR_MANAGER;
 
-        var event1 = new Event(
-                "Type 1",
+        var event1 = new Reunion(
                 "Evènement 1",
                 "Loup",
                 INITIAL_DATE,
                 90,
                 "Paris",
-                "Mr X, Loup, Elias",
-                6
+                "Mr X, Loup, Elias"
         );
 
-        var event2 = new Event(
-                "Type 1",
+        var event2 = new Reunion(
                 "Evènement 1",
                 "Loup",
                 INITIAL_DATE.minusMinutes(30),
                 60,
                 "Paris",
-                "Mr X, Loup, Elias",
-                6
+                "Mr X, Loup, Elias"
         );
 
         var res = calendarManager.conflit(event1, event2);
@@ -377,26 +363,22 @@ public class CalendarManagerTests {
 
         var calendarManager = EMPTY_CALENDAR_MANAGER;
 
-        var event1 = new Event(
-                "Type 1",
+        var event1 = new Reunion(
                 "Evènement 1",
                 "Loup",
                 INITIAL_DATE.plusDays(1),
                 90,
                 "Paris",
-                "Mr X, Loup, Elias",
-                6
+                "Mr X, Loup, Elias"
         );
 
-        var event2 = new Event(
-                "Type 1",
+        var event2 = new Reunion(
                 "Evènement 1",
                 "Loup",
                 INITIAL_DATE,
                 60,
                 "Paris",
-                "Mr X, Loup, Elias",
-                6
+                "Mr X, Loup, Elias"
         );
 
         var res = calendarManager.conflit(event1, event2);

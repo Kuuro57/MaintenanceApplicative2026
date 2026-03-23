@@ -2,16 +2,64 @@ package com.mycalendar;
 
 import java.time.LocalDateTime;
 
+/**
+ * Représente un évènement
+ */
 public class Event {
-    public String type; // "RDV_PERSONNEL", "REUNION", "PERIODIQUE"
-    public String title;
-    public String proprietaire;
-    public LocalDateTime dateDebut;
-    public int dureeMinutes;
-    public String lieu; // utilisé seulement pour REUNION
-    public String participants; // séparés par virgules (pour REUNION uniquement)
-    public int frequenceJours; // uniquement pour PERIODIQUE
 
+    /**
+     * Type d'évènement "RDV_PERSONNEL", "REUNION", "PERIODIQUE"
+     */
+    public String type;
+
+    /**
+     * Titre de l'évènement
+     */
+    public String title;
+
+    /**
+     * Propriétaire de l'évènement
+     */
+    public String proprietaire;
+
+    /**
+     * Date de début
+     */
+    public LocalDateTime dateDebut;
+
+    /**
+     * Durée de l'évènement (en minutes)
+     */
+    public int dureeMinutes;
+
+    /**
+     * Lieu de l'évènement (utilisé seulement pour REUNION)
+     */
+    public String lieu;
+
+    /**
+     * Participants de l'évènement (séparés par virgules (pour REUNION uniquement))
+     */
+    public String participants;
+
+    /**
+     * Fréquence périodique de l'évènement (uniquement pour PERIODIQUE)
+     */
+    public int frequenceJours;
+
+
+
+    /**
+     * Constructeur publique
+     * @param type Type de l'évènement
+     * @param title Titre de l'évènement
+     * @param proprietaire Propriétaire de l'évènement
+     * @param dateDebut Date de début
+     * @param dureeMinutes Durée (en minute)
+     * @param lieu Lieu de l'évènement
+     * @param participants Participants de l'évènement
+     * @param frequenceJours Fréquence périodique de l'évènement
+     */
     public Event(String type, String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes,
                  String lieu, String participants, int frequenceJours) {
         this.type = type;
@@ -24,6 +72,12 @@ public class Event {
         this.frequenceJours = frequenceJours;
     }
 
+
+
+    /**
+     * Retourne la description de l'évènement
+     * @return La description
+     */
     public String description() {
         String desc = "";
         if (type.equals("RDV_PERSONNEL")) {
@@ -35,4 +89,5 @@ public class Event {
         }
         return desc;
     }
+    
 }

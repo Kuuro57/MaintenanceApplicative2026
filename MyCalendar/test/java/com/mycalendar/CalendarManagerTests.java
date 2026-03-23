@@ -1,9 +1,6 @@
 package com.mycalendar;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -53,7 +50,6 @@ public class CalendarManagerTests {
     /**
      * Attributs nécessaires pour tester la sortie du println()
      */
-    private final PrintStream standardOut = System.out;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
 
     @BeforeEach
@@ -313,7 +309,7 @@ public class CalendarManagerTests {
 
         var res = calendarManager.conflit(PERIODIC_EVENT_ONE, NON_PERIODIC_EVENT_ONE);
 
-        assertFalse(res, "La méthode doit renvoyer false");
+        Assertions.assertFalse(res, "La méthode doit renvoyer false");
 
     }
 
@@ -325,7 +321,7 @@ public class CalendarManagerTests {
 
         var res = calendarManager.conflit(NON_PERIODIC_EVENT_ONE, NON_PERIODIC_EVENT_TWO);
 
-        assertFalse(res, "La méthode doit renvoyer false");
+        Assertions.assertFalse(res, "La méthode doit renvoyer false");
 
     }
 
@@ -337,7 +333,7 @@ public class CalendarManagerTests {
 
         var res = calendarManager.conflit(NON_PERIODIC_EVENT_ONE, PERIODIC_EVENT_ONE);
 
-        assertFalse(res, "La méthode doit renvoyer false");
+        Assertions.assertFalse(res, "La méthode doit renvoyer false");
 
     }
 
@@ -371,7 +367,7 @@ public class CalendarManagerTests {
 
         var res = calendarManager.conflit(event1, event2);
 
-        assertTrue(res, "La méthode doit renvoyer true");
+        Assertions.assertTrue(res, "La méthode doit renvoyer true");
 
     }
 
@@ -405,7 +401,7 @@ public class CalendarManagerTests {
 
         var res = calendarManager.conflit(event1, event2);
 
-        assertFalse(res, "La méthode doit renvoyer false");
+        Assertions.assertFalse(res, "La méthode doit renvoyer false");
 
     }
 

@@ -1,5 +1,8 @@
 package com.mycalendar;
 
+import com.mycalendar.types.Periodique;
+import com.mycalendar.types.TypeCode;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,19 +28,10 @@ public class CalendarManager {
 
     /**
      * Ajoute un évènement au calendrier
-     * @param type Type de l'évènement
-     * @param title Titre de l'évènement
-     * @param proprietaire Propriétaire de l'évènement
-     * @param dateDebut Date de début
-     * @param dureeMinutes Durée (en minute)
-     * @param lieu Lieu de l'évènement
-     * @param participants Participants de l'évènement
-     * @param frequenceJours Fréquence périodique de l'évènement
+     * @param event Evènement à ajouter
      */
-    public void ajouterEvent(String type, String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes,
-                             String lieu, String participants, int frequenceJours) {
-        Event e = new Event(type, title, proprietaire, dateDebut, dureeMinutes, lieu, participants, frequenceJours);
-        events.add(e);
+    public void ajouterEvent(Event event) {
+        events.add(event);
     }
 
     /**
@@ -49,14 +43,14 @@ public class CalendarManager {
     public List<Event> eventsDansPeriode(LocalDateTime debut, LocalDateTime fin) {
         List<Event> result = new ArrayList<>();
         for (Event e : events) {
-            if (e.type.equals("PERIODIQUE")) {
+            if (e.type.equals(TypeCode.PERIODIQUE)) {
                 LocalDateTime temp = e.dateDebut;
                 while (temp.isBefore(fin)) {
                     if (!temp.isBefore(debut)) {
                         result.add(e);
                         break;
                     }
-                    temp = temp.plusDays(e.frequenceJours);
+                    temp = temp.plusDays(((Periodique) e).getFrequenceJours());
                 }
             } else if (!e.dateDebut.isBefore(debut) && !e.dateDebut.isAfter(fin)) {
                 result.add(e);
@@ -90,7 +84,7 @@ public class CalendarManager {
      */
     public void afficherEvenements() {
         for (Event e : events) {
-            System.out.println(e.description());
+            System.out.println(e.getDescription());
         }
     }
 }

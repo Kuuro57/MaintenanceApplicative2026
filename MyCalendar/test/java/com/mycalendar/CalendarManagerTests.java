@@ -3,6 +3,7 @@ package com.mycalendar;
 import com.mycalendar.types.Periodique;
 import com.mycalendar.types.Reunion;
 import com.mycalendar.types.RdvPersonnel;
+import com.mycalendar.types.TypeCode;
 import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayOutputStream;
@@ -230,7 +231,7 @@ public class CalendarManagerTests {
         var res = calendarManager.eventsDansPeriode(dateDebut, dateFin);
 
         assertEquals(1, res.size(), "La liste doit contenir 1 seul évènement");
-        assertEquals("REUNION", res.getFirst().type, "Le type de l'évènement doit être 'REUNION'");
+        assertEquals(TypeCode.REUNION, res.getFirst().type, "Le type de l'évènement doit être 'REUNION'");
 
     }
 
@@ -245,7 +246,7 @@ public class CalendarManagerTests {
         var res = calendarManager.eventsDansPeriode(dateDebut, dateFin);
 
         assertEquals(1, res.size(), "La liste doit contenir 1 seul évènement");
-        assertEquals("PERIODIQUE", res.getFirst().type, "Le type de l'évènement doit être 'PERIODIQUE'");
+        assertEquals(TypeCode.PERIODIQUE, res.getFirst().type, "Le type de l'évènement doit être 'PERIODIQUE'");
 
     }
 
@@ -406,7 +407,7 @@ public class CalendarManagerTests {
         calendarManager.afficherEvenements();
 
         var expected = """
-        Réunion : Réunion test à Nancy avec Noah / Loup / Elias
+        Réunion : Réunion test à Nancy avec Noah, Loup, Elias
         RDV : Réunion test 2 à 2026-01-02T10:00
         Événement périodique : Réunion test 3 tous les 8 jours
         """;

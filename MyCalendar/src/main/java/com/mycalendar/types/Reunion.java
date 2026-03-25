@@ -1,8 +1,13 @@
 package com.mycalendar.types;
 
 import com.mycalendar.Event;
+import com.mycalendar.datas.Duree;
+import com.mycalendar.datas.Lieu;
+import com.mycalendar.datas.Personne;
+import com.mycalendar.datas.Titre;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Représente le type d'évènement 'Réunion'
@@ -12,12 +17,12 @@ public class Reunion extends Event {
     /**
      * Lieu où se déroule l'évènement
      */
-    private String lieu;
+    private Lieu lieu;
 
     /**
      * Participants de l'évènement
      */
-    private String participants;
+    private List<Personne> participants;
 
 
 
@@ -25,7 +30,7 @@ public class Reunion extends Event {
      * Constructeur publique
      *
      */
-    public Reunion(String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes, String lieu, String participants) {
+    public Reunion(Titre title, Personne proprietaire, LocalDateTime dateDebut, Duree dureeMinutes, Lieu lieu, List<Personne> participants) {
         super(TypeCode.REUNION, title, proprietaire, dateDebut, dureeMinutes);
         this.lieu = lieu;
         this.participants = participants;
@@ -35,6 +40,11 @@ public class Reunion extends Event {
 
     @Override
     public String getDescription() {
-        return "Réunion : " + this.title + " à " + this.lieu + " avec " + this.participants;
+        var listOfNames = this.participants.stream()
+                .map(Personne::getNom)
+                .reduce("", (acc, p) -> acc + ", " + p)
+                .replaceFirst(", ", "");
+
+        return "Réunion : " + this.title.getTitre() + " à " + this.lieu.getLieu() + " avec " + listOfNames;
     }
 }

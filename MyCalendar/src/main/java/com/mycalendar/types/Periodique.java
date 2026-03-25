@@ -1,6 +1,10 @@
 package com.mycalendar.types;
 
 import com.mycalendar.Event;
+import com.mycalendar.datas.Duree;
+import com.mycalendar.datas.Frequence;
+import com.mycalendar.datas.Personne;
+import com.mycalendar.datas.Titre;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +16,7 @@ public class Periodique extends Event {
     /**
      * Fréquence de répétition de l'évènement (en jours)
      */
-    private final int frequenceJours;
+    private final Frequence frequenceJours;
 
 
 
@@ -20,7 +24,7 @@ public class Periodique extends Event {
      * Constructeur publique
      * @param frequenceJours Fréquence de répétition (en jours)
      */
-    public Periodique(String title, String proprietaire, LocalDateTime dateDebut, int dureeMinutes, int frequenceJours) {
+    public Periodique(Titre title, Personne proprietaire, LocalDateTime dateDebut, Duree dureeMinutes, Frequence frequenceJours) {
         super(TypeCode.PERIODIQUE,  title, proprietaire, dateDebut, dureeMinutes);
         this.frequenceJours = frequenceJours;
     }
@@ -29,13 +33,13 @@ public class Periodique extends Event {
 
     @Override
     public String getDescription() {
-        return "Événement périodique : " + this.title + " tous les " + this.frequenceJours + " jours";
+        return "Événement périodique : " + this.title.getTitre() + " tous les " + this.frequenceJours.getFrequence() + " jours";
     }
 
     /**
      * Récupère la fréquence de répétition de l'évènement
      * @return int
      */
-    public int getFrequenceJours() { return frequenceJours; }
+    public int getFrequenceJours() { return frequenceJours.getFrequence(); }
 
 }

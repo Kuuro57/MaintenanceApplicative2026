@@ -66,8 +66,8 @@ public class CalendarManager {
      * @return True si les évènements rentrent en conflit, False sinon
      */
     public boolean conflit(Event e1, Event e2) {
-        LocalDateTime fin1 = e1.dateDebut.plusMinutes(e1.dureeMinutes);
-        LocalDateTime fin2 = e2.dateDebut.plusMinutes(e2.dureeMinutes);
+        LocalDateTime fin1 = e1.dateDebut.plusMinutes(e1.dureeMinutes.getDuree());
+        LocalDateTime fin2 = e2.dateDebut.plusMinutes(e2.dureeMinutes.getDuree());
 
         if (e1.type.equals("PERIODIQUE") || e2.type.equals("PERIODIQUE")) {
             return false; // Simplification abusive

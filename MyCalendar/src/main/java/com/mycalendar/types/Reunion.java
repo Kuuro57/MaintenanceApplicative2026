@@ -1,15 +1,14 @@
 package com.mycalendar.types;
 
-import com.mycalendar.Event;
 import com.mycalendar.datas.*;
+import com.mycalendar.types.categories.EventNonPeriodique;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * Représente le type d'évènement 'Réunion'
  */
-public class Reunion extends Event {
+public class Reunion extends EventNonPeriodique {
 
     /**
      * Lieu où se déroule l'évènement
@@ -31,14 +30,6 @@ public class Reunion extends Event {
         super(TypeCode.REUNION, title, proprietaire, dateDebut, dureeMinutes);
         this.lieu = lieu;
         this.participants = participants;
-    }
-
-
-
-    @Override
-    public boolean estDansPeriode(LocalDateTime debut, LocalDateTime fin) {
-        LocalDateTime eventStart = this.dateDebut.getDate();
-        return !eventStart.isBefore(debut) && !eventStart.isAfter(fin);
     }
 
 

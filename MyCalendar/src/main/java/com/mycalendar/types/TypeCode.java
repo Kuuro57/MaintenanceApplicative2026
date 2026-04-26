@@ -1,5 +1,5 @@
 package com.mycalendar.types;
 
 public enum TypeCode {
-    REUNION, PERIODIQUE, RDV_PERSONNEL
+    REUNION, ENTRAINEMENT, RDV_PERSONNEL, ANNIVERSAIRE
 }

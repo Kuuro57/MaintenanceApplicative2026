@@ -56,17 +56,10 @@ public class CalendarManager {
      * @return True si les évènements rentrent en conflit, False sinon
      */
     public boolean conflit(Event e1, Event e2) {
-        LocalDateTime debut1 = e1.dateDebut.getDate();
-        LocalDateTime debut2 = e2.dateDebut.getDate();
-
-        LocalDateTime fin1 = debut1.plusMinutes(e1.dureeMinutes.getDuree());
-        LocalDateTime fin2 = debut2.plusMinutes(e2.dureeMinutes.getDuree());
-
-        if (e1.type.equals(TypeCode.PERIODIQUE) || e2.type.equals(TypeCode.PERIODIQUE)) {
-            return false; // Simplification abusive
-        }
-
-        return debut1.isBefore(fin2) && fin1.isAfter(debut2);
+        // Le polymorphisme s'occupe de tout :
+        // Si e1 est périodique, il utilisera sa logique de boucle.
+        // Si e2 est une réunion, il utilisera sa logique ponctuelle.
+        return e1.enConflitAvec(e2);
     }
 
 

@@ -66,6 +66,24 @@ public abstract class Event {
 
 
     /**
+     * Vérifie si cet évènement occupe le créneau temporel donné
+     * @param debut Date de début
+     * @param fin Date de fin
+     */
+    public abstract boolean occupeCreneau(LocalDateTime debut, LocalDateTime fin);
+
+
+
+    public boolean enConflitAvec(Event autre) {
+        return autre.occupeCreneau(
+                this.dateDebut.getDate(),
+                this.dateDebut.getDate().plusMinutes(this.dureeMinutes.getDuree())
+        );
+    }
+
+
+
+    /**
      * Retourne la description de l'évènement
      * @return La description
      */

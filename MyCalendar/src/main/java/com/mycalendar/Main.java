@@ -1,7 +1,7 @@
 package com.mycalendar;
 
 import com.mycalendar.datas.*;
-import com.mycalendar.types.Periodique;
+import com.mycalendar.types.Anniversaire;
 import com.mycalendar.types.RdvPersonnel;
 import com.mycalendar.types.Reunion;
 
@@ -98,7 +98,7 @@ public class Main {
                 System.out.println("1 - Voir les événements");
                 System.out.println("2 - Ajouter un rendez-vous perso");
                 System.out.println("3 - Ajouter une réunion");
-                System.out.println("4 - Ajouter un évènement périodique");
+                System.out.println("4 - Ajouter un évènement périodique (Anniversaire)");
                 System.out.println("5 - Se déconnecter");
                 System.out.print("Votre choix : ");
 
@@ -249,15 +249,11 @@ public class Main {
                         int heure3 = Integer.parseInt(scanner.nextLine());
                         System.out.print("Minute début (0-59) : ");
                         int minute3 = Integer.parseInt(scanner.nextLine());
-                        System.out.print("Frequence (en jours) : ");
-                        int frequence = Integer.parseInt(scanner.nextLine());
 
-                        calendar.ajouterEvent(new Periodique(
+                        calendar.ajouterEvent(new Anniversaire(
                                 new Titre(titre3),
                                 new Personne(utilisateur),
-                                new DateEvenement(jourRdv3, moisRdv3, annee3, new HeureDebut(heure3, minute3)),
-                                new Duree(0),
-                                new Frequence(frequence)
+                                new DateEvenement(jourRdv3, moisRdv3, annee3, new HeureDebut(heure3, minute3))
                         ));
 
                         System.out.println("Événement ajouté.");

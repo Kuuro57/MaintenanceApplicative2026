@@ -1,10 +1,11 @@
 package com.mycalendar.types;
 
-import com.mycalendar.Event;
 import com.mycalendar.datas.*;
+import com.mycalendar.types.categories.EventPeriodique;
+
 import java.time.LocalDateTime;
 
-public class Anniversaire extends Event {
+public class Anniversaire extends EventPeriodique {
 
 
     /**
@@ -15,7 +16,7 @@ public class Anniversaire extends Event {
      */
     public Anniversaire(Titre title, Personne proprietaire, DateEvenement dateDebut) {
         // 1440 minutes (24h)
-        super(TypeCode.PERIODIQUE, title, proprietaire, dateDebut, new Duree(1440));
+        super(TypeCode.ANNIVERSAIRE, title, proprietaire, dateDebut, new Duree(1440), new Frequence(365));
     }
 
 

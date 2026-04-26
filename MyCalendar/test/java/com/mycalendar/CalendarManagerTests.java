@@ -567,4 +567,35 @@ public class CalendarManagerTests {
 
         assertTrue(cours.occupeCreneau(debutConflit, finConflit));
     }
+
+    @Test
+    @DisplayName("Vérifie que la suppression par ID fonctionne sans boucle manuelle")
+    public void testSuppressionDeclarative() {
+        var manager = new CalendarManager();
+
+        var ev1 = new RdvPersonnel(
+                new Titre("RDV 1"),
+                new Personne("Noah"),
+                new DateEvenement(1, 1, 2000, new HeureDebut(0, 0)),
+                new Duree(30)
+                );
+        var ev2 = new RdvPersonnel(
+                new Titre("RDV 2"),
+                new Personne("Noah"),
+                new DateEvenement(1, 1, 2000, new HeureDebut(0, 0)),
+                new Duree(30)
+        );
+
+        manager.ajouterEvent(ev1);
+        manager.ajouterEvent(ev2);
+
+        var id = ev1.id.getId();
+
+        // Action
+        manager.supprimerEvenement(id);
+
+        // Vérification
+        assertEquals(1, manager.events.size(), "Il ne devrait rester qu'un seul évènement");
+        assertFalse(manager.events.contains(ev1), "Le premier évènement devrait avoir disparu");
+    }
 }

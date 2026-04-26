@@ -1,10 +1,7 @@
 package com.mycalendar.types;
 
 import com.mycalendar.Event;
-import com.mycalendar.datas.Duree;
-import com.mycalendar.datas.Lieu;
-import com.mycalendar.datas.Personne;
-import com.mycalendar.datas.Titre;
+import com.mycalendar.datas.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,10 +27,18 @@ public class Reunion extends Event {
      * Constructeur publique
      *
      */
-    public Reunion(Titre title, Personne proprietaire, LocalDateTime dateDebut, Duree dureeMinutes, Lieu lieu, List<Personne> participants) {
+    public Reunion(Titre title, Personne proprietaire, DateEvenement dateDebut, Duree dureeMinutes, Lieu lieu, List<Personne> participants) {
         super(TypeCode.REUNION, title, proprietaire, dateDebut, dureeMinutes);
         this.lieu = lieu;
         this.participants = participants;
+    }
+
+
+
+    @Override
+    public boolean estDansPeriode(LocalDateTime debut, LocalDateTime fin) {
+        LocalDateTime eventStart = this.dateDebut.getDate();
+        return !eventStart.isBefore(debut) && !eventStart.isAfter(fin);
     }
 
 

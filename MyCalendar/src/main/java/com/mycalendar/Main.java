@@ -185,7 +185,7 @@ public class Main {
                         calendar.ajouterEvent(new RdvPersonnel(
                                 new Titre(titre),
                                 new Personne(utilisateur),
-                                LocalDateTime.of(annee, moisRdv, jourRdv, heure, minute),
+                                new DateEvenement(jourRdv, moisRdv, annee, new HeureDebut(heure, minute)),
                                 new Duree(duree)
                         ));
 
@@ -226,7 +226,7 @@ public class Main {
                         calendar.ajouterEvent(new Reunion(
                                 new Titre(titre2),
                                 new Personne(utilisateur),
-                                LocalDateTime.of(annee2, moisRdv2, jourRdv2, heure2, minute2),
+                                new DateEvenement(jourRdv2, moisRdv2, annee2, new HeureDebut(heure2, minute2)),
                                 new Duree(duree2),
                                 new Lieu(lieu),
                                 participants
@@ -255,7 +255,7 @@ public class Main {
                         calendar.ajouterEvent(new Periodique(
                                 new Titre(titre3),
                                 new Personne(utilisateur),
-                                LocalDateTime.of(annee3, moisRdv3, jourRdv3, heure3, minute3),
+                                new DateEvenement(jourRdv3, moisRdv3, annee3, new HeureDebut(heure3, minute3)),
                                 new Duree(0),
                                 new Frequence(frequence)
                         ));

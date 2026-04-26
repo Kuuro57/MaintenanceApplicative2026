@@ -1,6 +1,5 @@
 package com.mycalendar;
 
-import com.mycalendar.types.Periodique;
 import com.mycalendar.types.TypeCode;
 
 import java.time.LocalDateTime;
@@ -34,6 +33,8 @@ public class CalendarManager {
         events.add(event);
     }
 
+
+
     /**
      * Retourne tous les évènement compris dans la période donnée en paramètre
      * @param debut Date de début de la recherche
@@ -41,23 +42,12 @@ public class CalendarManager {
      * @return Liste contenant les évènements trouvés dans la période donnée
      */
     public List<Event> eventsDansPeriode(LocalDateTime debut, LocalDateTime fin) {
-        List<Event> result = new ArrayList<>();
-        for (Event e : events) {
-            if (e.type.equals(TypeCode.PERIODIQUE)) {
-                LocalDateTime temp = e.dateDebut;
-                while (temp.isBefore(fin)) {
-                    if (!temp.isBefore(debut)) {
-                        result.add(e);
-                        break;
-                    }
-                    temp = temp.plusDays(((Periodique) e).getFrequenceJours());
-                }
-            } else if (!e.dateDebut.isBefore(debut) && !e.dateDebut.isAfter(fin)) {
-                result.add(e);
-            }
-        }
-        return result;
+        return events.stream()
+                .filter(e -> e.estDansPeriode(debut, fin))
+                .toList();
     }
+
+
 
     /**
      * Indique si deux évènements sont en conflit (se déroulent en même temps)
@@ -66,18 +56,20 @@ public class CalendarManager {
      * @return True si les évènements rentrent en conflit, False sinon
      */
     public boolean conflit(Event e1, Event e2) {
-        LocalDateTime fin1 = e1.dateDebut.plusMinutes(e1.dureeMinutes.getDuree());
-        LocalDateTime fin2 = e2.dateDebut.plusMinutes(e2.dureeMinutes.getDuree());
+        LocalDateTime debut1 = e1.dateDebut.getDate();
+        LocalDateTime debut2 = e2.dateDebut.getDate();
 
-        if (e1.type.equals("PERIODIQUE") || e2.type.equals("PERIODIQUE")) {
+        LocalDateTime fin1 = debut1.plusMinutes(e1.dureeMinutes.getDuree());
+        LocalDateTime fin2 = debut2.plusMinutes(e2.dureeMinutes.getDuree());
+
+        if (e1.type.equals(TypeCode.PERIODIQUE) || e2.type.equals(TypeCode.PERIODIQUE)) {
             return false; // Simplification abusive
         }
 
-        if (e1.dateDebut.isBefore(fin2) && fin1.isAfter(e2.dateDebut)) {
-            return true;
-        }
-        return false;
+        return debut1.isBefore(fin2) && fin1.isAfter(debut2);
     }
+
+
 
     /**
      * Affiche les informations de tous les évènements du calendrier
@@ -87,4 +79,5 @@ public class CalendarManager {
             System.out.println(e.getDescription());
         }
     }
+
 }

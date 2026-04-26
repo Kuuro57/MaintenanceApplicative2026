@@ -1,10 +1,7 @@
 package com.mycalendar.types;
 
 import com.mycalendar.Event;
-import com.mycalendar.datas.Duree;
-import com.mycalendar.datas.Frequence;
-import com.mycalendar.datas.Personne;
-import com.mycalendar.datas.Titre;
+import com.mycalendar.datas.*;
 
 import java.time.LocalDateTime;
 
@@ -24,9 +21,24 @@ public class Periodique extends Event {
      * Constructeur publique
      * @param frequenceJours Fréquence de répétition (en jours)
      */
-    public Periodique(Titre title, Personne proprietaire, LocalDateTime dateDebut, Duree dureeMinutes, Frequence frequenceJours) {
+    public Periodique(Titre title, Personne proprietaire, DateEvenement dateDebut, Duree dureeMinutes, Frequence frequenceJours) {
         super(TypeCode.PERIODIQUE,  title, proprietaire, dateDebut, dureeMinutes);
         this.frequenceJours = frequenceJours;
+    }
+
+
+
+    @Override
+    public boolean estDansPeriode(LocalDateTime debut, LocalDateTime fin) {
+        LocalDateTime temp = this.dateDebut.getDate();
+
+        while (temp.isBefore(fin)) {
+            if (!temp.isBefore(debut)) {
+                return true;
+            }
+            temp = temp.plusDays(this.getFrequenceJours());
+        }
+        return false;
     }
 
 

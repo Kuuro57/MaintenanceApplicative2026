@@ -20,12 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CalendarManagerTests {
 
     /**
-     * Date de référence pour les tests
-     */
-    private static final LocalDateTime INITIAL_DATE =
-            LocalDateTime.of(2026, 1, 1, 15, 0);
-
-    /**
      * Calendrier vide (aucun évènement)
      */
     private static CalendarManager EMPTY_CALENDAR_MANAGER;
@@ -90,7 +84,7 @@ public class CalendarManagerTests {
         PERIODIC_EVENT_ONE = new Periodique(
                 new Titre("Evènement 1"),
                 new Personne("Noah"),
-                INITIAL_DATE,
+                new DateEvenement(1, 1, 2026, new HeureDebut(15, 0)),
                 new Duree(60),
                 new Frequence(1)
         );
@@ -101,7 +95,7 @@ public class CalendarManagerTests {
         NON_PERIODIC_EVENT_ONE = new Reunion(
                 new Titre("Evènement 1"),
                 new Personne("Loup"),
-                INITIAL_DATE.plusDays(1),
+                new DateEvenement(2, 1, 2026, new HeureDebut(15, 0)),
                 new Duree(90),
                 new Lieu("Paris"),
                 participants
@@ -110,7 +104,7 @@ public class CalendarManagerTests {
         NON_PERIODIC_EVENT_TWO = new RdvPersonnel(
                 new Titre("Evènement 2"),
                 new Personne("Mr X"),
-                INITIAL_DATE.plusDays(4),
+                new DateEvenement(5, 1, 2026, new HeureDebut(15, 0)),
                 new Duree(90)
         );
     }
@@ -131,7 +125,7 @@ public class CalendarManagerTests {
                 new Reunion(
                         new Titre("Réunion test"),
                         new Personne("Noah"),
-                        INITIAL_DATE,
+                        new DateEvenement(1, 1, 2026, new HeureDebut(15, 0)),
                         new Duree(60),
                         new Lieu("Nancy"),
                         participants
@@ -142,7 +136,7 @@ public class CalendarManagerTests {
                 new Reunion(
                         new Titre("Réunion test"),
                         new Personne("Noah"),
-                        INITIAL_DATE,
+                        new DateEvenement(1, 1, 2026, new HeureDebut(15, 0)),
                         new Duree(60),
                         new Lieu("Nancy"),
                         participants
@@ -153,7 +147,7 @@ public class CalendarManagerTests {
                 new RdvPersonnel(
                         new Titre("Réunion test 2"),
                         new Personne("Loup"),
-                        INITIAL_DATE.plusDays(1).minusHours(5),
+                        new DateEvenement(2, 1, 2026, new HeureDebut(10, 0)),
                         new Duree(60)
                 )
         );
@@ -162,7 +156,7 @@ public class CalendarManagerTests {
                 new Periodique(
                         new Titre("Réunion test 3"),
                         new Personne("Mr X"),
-                        INITIAL_DATE.plusDays(4).plusHours(6),
+                        new DateEvenement(5, 1, 2026, new HeureDebut(21, 0)),
                         new Duree(150),
                         new Frequence(8)
                 )
@@ -172,7 +166,7 @@ public class CalendarManagerTests {
                 new Periodique(
                         new Titre("Réunion test Périodique"),
                         new Personne("Mr X"),
-                        INITIAL_DATE,
+                        new DateEvenement(1, 1, 2026, new HeureDebut(15, 0)),
                         new Duree(60),
                         new Frequence(2)
                 )
@@ -203,7 +197,7 @@ public class CalendarManagerTests {
                 new Reunion(
                         new Titre("Réunion test"),
                         new Personne("Noah"),
-                        INITIAL_DATE,
+                        new DateEvenement(1, 1, 2026, new HeureDebut(15, 0)),
                         new Duree(60),
                         new Lieu("Nancy"),
                         participants
@@ -219,10 +213,10 @@ public class CalendarManagerTests {
     public void testGetZeroEventInPeriod() {
 
         var calendarManager = CALENDAR_MANAGER_WITH_MANY_EVENT;
-        var dateDebut = INITIAL_DATE.minusWeeks(2);
-        var dateFin = dateDebut.minusWeeks(1);
+        var dateDebut = new DateEvenement(18, 12, 2025, new HeureDebut(15, 0));
+        var dateFin = new DateEvenement(11, 12, 2025, new HeureDebut(15, 0));
 
-        var res = calendarManager.eventsDansPeriode(dateDebut, dateFin);
+        var res = calendarManager.eventsDansPeriode(dateDebut.getDate(), dateFin.getDate());
 
         assertEquals(0, res.size(), "La liste ne doit contenir aucun évènement");
     }
@@ -232,10 +226,10 @@ public class CalendarManagerTests {
     public void testGetOneNonPeriodicEventInPeriod() {
 
         var calendarManager = CALENDAR_MANAGER_WITH_MANY_EVENT;
-        var dateDebut = INITIAL_DATE.minusMinutes(5);
-        var dateFin = dateDebut.plusMinutes(10);
+        var dateDebut = new DateEvenement(1, 1, 2026, new HeureDebut(14, 55));
+        var dateFin = new DateEvenement(1, 1, 2026, new HeureDebut(15, 5));
 
-        var res = calendarManager.eventsDansPeriode(dateDebut, dateFin);
+        var res = calendarManager.eventsDansPeriode(dateDebut.getDate(), dateFin.getDate());
 
         assertEquals(1, res.size(), "La liste doit contenir 1 seul évènement");
         assertEquals(TypeCode.REUNION, res.getFirst().type, "Le type de l'évènement doit être 'REUNION'");
@@ -246,10 +240,10 @@ public class CalendarManagerTests {
     public void testGetOnePeriodicEventInPeriod() {
 
         var calendarManager = CALENDAR_MANAGER_WITH_PERIODIC_EVENT;
-        var dateDebut = INITIAL_DATE.minusMinutes(5);
-        var dateFin = dateDebut.plusMinutes(10);
+        var dateDebut = new DateEvenement(1, 1, 2026, new HeureDebut(14, 55));
+        var dateFin = new DateEvenement(1, 1, 2026, new HeureDebut(15, 5));
 
-        var res = calendarManager.eventsDansPeriode(dateDebut, dateFin);
+        var res = calendarManager.eventsDansPeriode(dateDebut.getDate(), dateFin.getDate());
 
         assertEquals(1, res.size(), "La liste doit contenir 1 seul évènement");
         assertEquals(TypeCode.PERIODIQUE, res.getFirst().type, "Le type de l'évènement doit être 'PERIODIQUE'");
@@ -261,7 +255,10 @@ public class CalendarManagerTests {
 
         var calendarManager = CALENDAR_MANAGER_WITH_PERIODIC_EVENT;
 
-        var res = calendarManager.eventsDansPeriode(INITIAL_DATE, INITIAL_DATE);
+        var res = calendarManager.eventsDansPeriode(
+                new DateEvenement(1, 1, 2026, new HeureDebut(15, 0)).getDate(),
+                new DateEvenement(1, 1, 2026, new HeureDebut(15, 0)).getDate()
+        );
 
         assertEquals(0, res.size(), "La liste ne doit contenir aucun évènement");
     }
@@ -272,10 +269,10 @@ public class CalendarManagerTests {
     public void testGetPeriodicEventWithDateBeforeStartingDate() {
 
         var calendarManager = CALENDAR_MANAGER_WITH_PERIODIC_EVENT;
-        var dateDebut = INITIAL_DATE.plusMinutes(5);
-        var dateFin = INITIAL_DATE.plusMinutes(10);
+        var dateDebut = new DateEvenement(1, 1, 2026, new HeureDebut(15, 5));
+        var dateFin = new DateEvenement(1, 1, 2026, new HeureDebut(15, 10));
 
-        var res = calendarManager.eventsDansPeriode(dateDebut, dateFin);
+        var res = calendarManager.eventsDansPeriode(dateDebut.getDate(), dateFin.getDate());
 
         assertEquals(0, res.size(), "La liste ne doit contenir aucun évènement");
     }
@@ -286,10 +283,10 @@ public class CalendarManagerTests {
     public void testGetNonPeriodicEventWithDateBeforeStartingDate() {
 
         var calendarManager = CALENDAR_MANAGER_WITH_ONE_EVENT;
-        var dateDebut = INITIAL_DATE.plusMinutes(5);
-        var dateFin = INITIAL_DATE.plusMinutes(10);
+        var dateDebut = new DateEvenement(1, 1, 2026, new HeureDebut(15, 5));
+        var dateFin = new DateEvenement(1, 1, 2026, new HeureDebut(15, 10));
 
-        var res = calendarManager.eventsDansPeriode(dateDebut, dateFin);
+        var res = calendarManager.eventsDansPeriode(dateDebut.getDate(), dateFin.getDate());
 
         assertEquals(0, res.size(), "La liste ne doit contenir aucun évènement");
     }
@@ -334,7 +331,7 @@ public class CalendarManagerTests {
         var event1 = new Reunion(
                 new Titre("Evènement 1"),
                 new Personne("Loup"),
-                INITIAL_DATE,
+                new DateEvenement(1, 1, 2026, new HeureDebut(15, 0)),
                 new Duree(90),
                 new Lieu("Paris"),
                 participants
@@ -343,7 +340,7 @@ public class CalendarManagerTests {
         var event2 = new Reunion(
                 new Titre("Evènement 1"),
                 new Personne("Loup"),
-                INITIAL_DATE.minusMinutes(30),
+                new DateEvenement(1, 1, 2026, new HeureDebut(15, 30)),
                 new Duree(60),
                 new Lieu("Paris"),
                 participants
@@ -364,7 +361,7 @@ public class CalendarManagerTests {
         var event1 = new Reunion(
                 new Titre("Evènement 1"),
                 new Personne("Loup"),
-                INITIAL_DATE.plusDays(1),
+                new DateEvenement(2, 1, 2026, new HeureDebut(15, 0)),
                 new Duree(90),
                 new Lieu("Paris"),
                 participants
@@ -373,7 +370,7 @@ public class CalendarManagerTests {
         var event2 = new Reunion(
                 new Titre("Evènement 1"),
                 new Personne("Loup"),
-                INITIAL_DATE,
+                new DateEvenement(1, 1, 2026, new HeureDebut(15, 0)),
                 new Duree(60),
                 new Lieu("Paris"),
                 participants

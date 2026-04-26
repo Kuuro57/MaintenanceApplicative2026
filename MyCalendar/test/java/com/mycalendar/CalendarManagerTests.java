@@ -2,10 +2,7 @@ package com.mycalendar;
 
 import com.mycalendar.datas.*;
 
-import com.mycalendar.types.Periodique;
-import com.mycalendar.types.Reunion;
-import com.mycalendar.types.RdvPersonnel;
-import com.mycalendar.types.TypeCode;
+import com.mycalendar.types.*;
 
 import org.junit.jupiter.api.*;
 
@@ -159,6 +156,14 @@ public class CalendarManagerTests {
                         new DateEvenement(5, 1, 2026, new HeureDebut(21, 0)),
                         new Duree(150),
                         new Frequence(8)
+                )
+        );
+
+        CALENDAR_MANAGER_WITH_MANY_EVENT.ajouterEvent(
+                new Anniversaire(
+                        new Titre("Anniversaire de Noah"),
+                        new Personne("Noah"),
+                        new DateEvenement(24, 12, 2026, new HeureDebut(0, 0))
                 )
         );
 
@@ -403,6 +408,7 @@ public class CalendarManagerTests {
         Réunion : Réunion test à Nancy avec Noah, Loup, Elias
         RDV : Réunion test 2 à 2026-01-02T10:00
         Événement périodique : Réunion test 3 tous les 8 jours
+        Anniversaire de Noah !
         """;
 
         var actual = outputStreamCaptor.toString()
@@ -410,5 +416,84 @@ public class CalendarManagerTests {
                 .strip();
 
         assertEquals(expected.strip(), actual);
+    }
+
+    @Test
+    @DisplayName("Récupération d'un anniversaire l'année suivante")
+    public void testGetAnniversaireNextYear() {
+
+        var calendarManager = new CalendarManager();
+
+        Event anniv = new Anniversaire(
+                new Titre("Anniversaire Noah"),
+                new Personne("Noah"),
+                new DateEvenement(24, 12, 2026, new HeureDebut(0, 0))
+        );
+        calendarManager.ajouterEvent(anniv);
+
+        var debut2027 = LocalDateTime.of(2027, 12, 23, 0, 0);
+        var fin2027 = LocalDateTime.of(2027, 12, 25, 0, 0);
+
+        var res = calendarManager.eventsDansPeriode(debut2027, fin2027);
+
+        assertEquals(1, res.size(), "L'anniversaire doit être trouvé en 2027");
+    }
+
+    @Test
+    @DisplayName("Cas où l'évènement commence AVANT la période demandée")
+    public void testGetNonPeriodicEventStartingBeforePeriod() {
+
+        var calendarManager = new CalendarManager();
+        var rdv = new RdvPersonnel(
+                new Titre("Médecin"),
+                new Personne("Noah"),
+                new DateEvenement(10, 1, 2026, new HeureDebut(10, 0)),
+                new Duree(30)
+        );
+        calendarManager.ajouterEvent(rdv);
+
+        var debut = new DateEvenement(10, 1, 2026, new HeureDebut(11, 0)).getDate();
+        var fin = new DateEvenement(10, 1, 2026, new HeureDebut(12, 0)).getDate();
+        var res = calendarManager.eventsDansPeriode(debut, fin);
+
+        assertEquals(0, res.size(), "L'évènement commence avant la période, il ne doit pas être retourné");
+    }
+
+    @Test
+    @DisplayName("Occurrence annuelle avant le début de la recherche")
+    public void testAnniversaireOccurrenceBeforeSearchPeriod() {
+        var calendarManager = new CalendarManager();
+
+        var anniv = new Anniversaire(
+                new Titre("Anniv Noah"),
+                new Personne("Noah"),
+                new DateEvenement(5, 1, 2026, new HeureDebut(0, 0))
+        );
+        calendarManager.ajouterEvent(anniv);
+
+
+        var debut = new DateEvenement(10, 1, 2026, new HeureDebut(0, 0)).getDate();
+        var fin = new DateEvenement(20, 1, 2026, new HeureDebut(0, 0)).getDate();
+        var res = calendarManager.eventsDansPeriode(debut, fin);
+
+        assertEquals(0, res.size(), "L'anniversaire est passé, il ne devrait pas être trouvé");
+    }
+
+    @Test
+    @DisplayName("L'occurrence de l'année suivante est aussi avant le début de la recherche")
+    public void testAnniversaireOccurrenceNextYearBeforeSearchPeriod() {
+
+        var anniv = new Anniversaire(
+                new Titre("Anniv Noah"),
+                new Personne("Noah"),
+                new DateEvenement(5, 1, 2026, new HeureDebut(0, 0))
+        );
+
+        var debut = new DateEvenement(1, 12, 2029, new HeureDebut(0, 0)).getDate();
+        var fin = new DateEvenement(10, 12, 2029, new HeureDebut(0, 0)).getDate();
+        var res = anniv.estDansPeriode(debut, fin);
+
+        assertFalse(res, "L'anniversaire de l'année suivante est aussi déjà passé");
+
     }
 }

@@ -4,6 +4,7 @@ import com.mycalendar.datas.*;
 
 import com.mycalendar.types.*;
 
+import com.mycalendar.types.categories.EventPeriodique;
 import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayOutputStream;
@@ -78,12 +79,10 @@ public class CalendarManagerTests {
      * Initialise les évènements de tests
      */
     private static void initEvents() {
-        PERIODIC_EVENT_ONE = new Periodique(
+        PERIODIC_EVENT_ONE = new Anniversaire(
                 new Titre("Evènement 1"),
                 new Personne("Noah"),
-                new DateEvenement(1, 1, 2026, new HeureDebut(15, 0)),
-                new Duree(60),
-                new Frequence(1)
+                new DateEvenement(1, 1, 2026, new HeureDebut(15, 0))
         );
 
         var participants = new ArrayList<Personne>(
@@ -150,12 +149,10 @@ public class CalendarManagerTests {
         );
 
         CALENDAR_MANAGER_WITH_MANY_EVENT.ajouterEvent(
-                new Periodique(
+                new Anniversaire(
                         new Titre("Réunion test 3"),
                         new Personne("Mr X"),
-                        new DateEvenement(5, 1, 2026, new HeureDebut(21, 0)),
-                        new Duree(150),
-                        new Frequence(8)
+                        new DateEvenement(5, 1, 2026, new HeureDebut(21, 0))
                 )
         );
 
@@ -167,13 +164,21 @@ public class CalendarManagerTests {
                 )
         );
 
+        CALENDAR_MANAGER_WITH_MANY_EVENT.ajouterEvent(
+                new Entrainement(
+                        new Titre("Anniversaire de Noah"),
+                        new Personne("Noah"),
+                        new DateEvenement(24, 12, 2026, new HeureDebut(0, 0)),
+                        new Duree(30),
+                        new Frequence(2)
+                )
+        );
+
         CALENDAR_MANAGER_WITH_PERIODIC_EVENT.ajouterEvent(
-                new Periodique(
+                new Anniversaire(
                         new Titre("Réunion test Périodique"),
                         new Personne("Mr X"),
-                        new DateEvenement(1, 1, 2026, new HeureDebut(15, 0)),
-                        new Duree(60),
-                        new Frequence(2)
+                        new DateEvenement(1, 1, 2026, new HeureDebut(15, 0))
                 )
         );
     }
@@ -251,7 +256,7 @@ public class CalendarManagerTests {
         var res = calendarManager.eventsDansPeriode(dateDebut.getDate(), dateFin.getDate());
 
         assertEquals(1, res.size(), "La liste doit contenir 1 seul évènement");
-        assertEquals(TypeCode.PERIODIQUE, res.getFirst().type, "Le type de l'évènement doit être 'PERIODIQUE'");
+        assertEquals(TypeCode.ANNIVERSAIRE, res.getFirst().type, "Le type de l'évènement doit être 'PERIODIQUE'");
     }
 
     @Test
@@ -407,8 +412,9 @@ public class CalendarManagerTests {
         var expected = """
         Réunion : Réunion test à Nancy avec Noah, Loup, Elias
         RDV : Réunion test 2 à 2026-01-02T10:00
-        Événement périodique : Réunion test 3 tous les 8 jours
+        Anniversaire de Mr X !
         Anniversaire de Noah !
+        Entraînement de Anniversaire de Noah (tous les 2 jours)
         """;
 
         var actual = outputStreamCaptor.toString()
@@ -495,5 +501,70 @@ public class CalendarManagerTests {
 
         assertFalse(res, "L'anniversaire de l'année suivante est aussi déjà passé");
 
+    }
+
+    @Test
+    @DisplayName("Vérifie qu'une occurrence annuelle est détectée lors d'une recherche sur l'année suivante")
+    public void testEventPeriodiqueOccurrenceSuccess() {
+
+        Event anniv = new Anniversaire(
+                new Titre("Anniversaire"),
+                new Personne("Noah"),
+                new DateEvenement(5, 1, 2026, new HeureDebut(0, 0))
+        );
+
+        LocalDateTime debut = LocalDateTime.of(2027, 1, 1, 0, 0);
+        LocalDateTime fin = LocalDateTime.of(2027, 1, 10, 0, 0);
+
+        assertTrue(anniv.estDansPeriode(debut, fin),
+                "L'occurrence de 2027 devrait être détectée par la boucle d'EventPeriodique");
+    }
+
+    @Test
+    @DisplayName("Vérifie qu'un évènement périodique est ignoré quand la fenêtre de recherche tombe dans le creux entre deux répétitions")
+    public void testEntrainementBetweenOccurrences() {
+        var sport = new Entrainement(
+                new Titre("Tennis"), new Personne("Noah"),
+                new DateEvenement(1, 1, 2026, new HeureDebut(10, 0)),
+                new Duree(60),
+                new Frequence(5)
+        );
+
+        LocalDateTime debutRecherche = LocalDateTime.of(2026, 1, 3, 0, 0);
+        LocalDateTime finRecherche = LocalDateTime.of(2026, 1, 4, 0, 0);
+
+        assertFalse(sport.estDansPeriode(debutRecherche, finRecherche));
+    }
+
+    @Test
+    @DisplayName("Vérifie la détection d'une occurrence située après un saut de fréquence)")
+    public void testEstDansPeriodeTrueHitAfterJump() {
+
+        var sport = new Entrainement(
+                new Titre("Foot"), new Personne("Noah"),
+                new DateEvenement(1, 1, 2026, new HeureDebut(10, 0)),
+                new Duree(60), new Frequence(2)
+        );
+
+        var debutRecherche = LocalDateTime.of(2026, 1, 2, 0, 0);
+        var finRecherche = LocalDateTime.of(2026, 1, 4, 0, 0);
+
+        assertTrue(sport.estDansPeriode(debutRecherche, finRecherche));
+    }
+
+    @Test
+    @DisplayName("Vérifie qu'un conflit est détecté sur une occurrence ultérieure de l'évènement")
+    public void testOccupeCreneauTrueHitAfterJump() {
+
+        var cours = new Entrainement(
+                new Titre("Yoga"), new Personne("Noah"),
+                new DateEvenement(1, 1, 2026, new HeureDebut(10, 0)),
+                new Duree(60), new Frequence(5)
+        );
+
+        var debutConflit = LocalDateTime.of(2026, 1, 6, 9, 0);
+        var finConflit = LocalDateTime.of(2026, 1, 6, 12, 0);
+
+        assertTrue(cours.occupeCreneau(debutConflit, finConflit));
     }
 }

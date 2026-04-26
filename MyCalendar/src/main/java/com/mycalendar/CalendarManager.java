@@ -1,7 +1,5 @@
 package com.mycalendar;
 
-import com.mycalendar.types.TypeCode;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,9 +54,6 @@ public class CalendarManager {
      * @return True si les évènements rentrent en conflit, False sinon
      */
     public boolean conflit(Event e1, Event e2) {
-        // Le polymorphisme s'occupe de tout :
-        // Si e1 est périodique, il utilisera sa logique de boucle.
-        // Si e2 est une réunion, il utilisera sa logique ponctuelle.
         return e1.enConflitAvec(e2);
     }
 
@@ -71,6 +66,17 @@ public class CalendarManager {
         for (Event e : events) {
             System.out.println(e.getDescription());
         }
+    }
+
+
+
+    /**
+     * Supprime un évènement par rapport à l'id passé en paramètre
+     *
+     * @param id Id de l'évènement que l'on veut supprimer
+     */
+    public void supprimerEvenement(int id) {
+        this.events.removeIf(event -> event.id.getId() == id);
     }
 
 }

@@ -1,14 +1,16 @@
 package com.mycalendar;
 
-import com.mycalendar.datas.DateEvenement;
-import com.mycalendar.datas.Duree;
-import com.mycalendar.datas.Personne;
-import com.mycalendar.datas.Titre;
+import com.mycalendar.datas.*;
 import com.mycalendar.types.TypeCode;
 
 import java.time.LocalDateTime;
 
 public abstract class Event {
+
+    /**
+     * Id de l'évènement
+     */
+    public final EventId id;
 
     /**
      * Type de l'évènement
@@ -46,6 +48,7 @@ public abstract class Event {
      * @param dureeMinutes Durée (en minute)
      */
     protected Event(TypeCode type, Titre title, Personne proprietaire, DateEvenement dateDebut, Duree dureeMinutes) {
+        this.id = EventId.getNewId();
         this.type = type;
         this.title = title;
         this.proprietaire = proprietaire;
